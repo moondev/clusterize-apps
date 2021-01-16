@@ -8,6 +8,8 @@ helmChartInflationGenerator:
    -
     apiVersion: labs.vmwcre.run/v1alpha1
     kind: Lab
+    metadata:
+      name: antrea-istio
     tasks:
       kind-cluster:
         apiVersion: kind.x-k8s.io/v1alpha4
