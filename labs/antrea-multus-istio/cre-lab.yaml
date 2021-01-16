@@ -1,0 +1,51 @@
+apiVersion: labs.vmwcre.run/v1alpha1
+kind: Lab
+metadata:
+  name: antrea-istio
+tasks:
+
+  kind-cluster:
+    apiVersion: kind.x-k8s.io/v1alpha4
+    kind: Cluster
+    networking:
+      disableDefaultCNI: true
+    nodes:
+    - image: quay.io/vmwcre/node:v1.20.2
+      role: control-plane
+    - role: worker
+
+  antrea:
+    apiVersion: kustomize.config.k8s.io/v1beta1
+    kind: Kustomization
+    resources:
+    - github.com/moondev/clusterize-apps//apps/antrea/v0.11.1
+
+  multus:
+    apiVersion: kustomize.config.k8s.io/v1beta1
+    kind: Kustomization
+    resources:
+    - github.com/moondev/clusterize-apps//apps/multus/v3.6
+
+  metallb:
+    apiVersion: kustomize.config.k8s.io/v1beta1
+    kind: Kustomization
+    resources:
+    - github.com/moondev/clusterize-apps//apps/metallb/v0.9.5
+
+  metrics-server:
+    apiVersion: kustomize.config.k8s.io/v1beta1
+    kind: Kustomization
+    resources:
+    - github.com/moondev/clusterize-apps//apps/metrics-server/v0.4.1
+
+  istio-operator:
+    apiVersion: kustomize.config.k8s.io/v1beta1
+    kind: Kustomization
+    resources:
+    - github.com/moondev/clusterize-apps//apps/istio-operator/v1.8.2
+
+  bookinfo:
+    apiVersion: kustomize.config.k8s.io/v1beta1
+    kind: Kustomization
+    resources:
+    - github.com/moondev/clusterize-apps//apps/bookinfo/v0.1.8.2
