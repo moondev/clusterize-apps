@@ -1,0 +1,50 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+helmChartInflationGenerator:
+- chartRepoUrl: https://raw.githubusercontent.com/moondev/echo-chart/main
+  chartName: echo
+  valuesLocal:
+   items:
+   -
+    apiVersion: labs.vmwcre.run/v1alpha1
+    kind: Lab
+    tasks:
+      kind-cluster:
+        apiVersion: kind.x-k8s.io/v1alpha4
+        kind: Cluster
+        networking:
+          disableDefaultCNI: true
+        nodes:
+        - image: quay.io/vmwcre/node:v1.20.2
+          role: control-plane
+        - role: worker
+      antrea:
+        apiVersion: kustomize.config.k8s.io/v1beta1
+        kind: Kustomization
+        resources:
+        - github.com/moondev/clusterize-apps//antrea
+      multus:
+        apiVersion: kustomize.config.k8s.io/v1beta1
+        kind: Kustomization
+        resources:
+        - github.com/moondev/clusterize-apps//multus
+      metallb:
+        apiVersion: kustomize.config.k8s.io/v1beta1
+        kind: Kustomization
+        resources:
+        - github.com/moondev/clusterize-apps//metallb
+      metrics-server:
+        apiVersion: kustomize.config.k8s.io/v1beta1
+        kind: Kustomization
+        resources:
+        - github.com/moondev/clusterize-apps//metrics-server
+      istio-operator:
+        apiVersion: kustomize.config.k8s.io/v1beta1
+        kind: Kustomization
+        resources:
+        - github.com/moondev/clusterize-apps//istio-operator
+      bookinfo:
+        apiVersion: kustomize.config.k8s.io/v1beta1
+        kind: Kustomization
+        resources:
+        - github.com/moondev/clusterize-apps//bookinfo
